@@ -1,0 +1,1079 @@
+<div id="viva-reviews-container-div">
+  <div id="sar-asset-container"></div>
+  <style>
+    .sarDateDiv {
+      display: none;
+    }
+    .responsive-image {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  </style>
+</div>
+{%- assign pkey = product.id | prepend: 'p' -%}
+{%- assign reviews = product.metafields.viva_r[pkey].value -%}
+{%- assign vivaLayouts = shop.metafields.viva_r.layout_settings.value -%}
+{% assign vivaLanguageSettings = shop.metafields.viva_r.language_settings.value %}
+<script>
+  var sarmReviewsFromMeta = {{ reviews | json}}; var sarmLayoutsFromMeta = {{ vivaLayouts| json}};
+  if (!sarmLayoutsFromMeta) { sarmLayoutsFromMeta = { show_flags: true }; console.log("setting default layout") }
+  var sarmReviewLanguageSettings = {{ vivaLanguageSettings| json}};
+  if (!sarmReviewLanguageSettings) {
+      sarmReviewLanguageSettings = {
+          cancel_review_btn_text: "Cancel",
+          submit_review_btn_text: "Submit Review",
+          add_images_btn_text: "Add Images",
+          write_review_btn_text: "Write A Review",
+          give_review_btn_text: "Write A Review",
+          your_feedback_label_text: "Your Feedback",
+          your_email_label_text: "Your Email",
+          your_name_label_text: "Your Name",
+          your_rating_label_text: "Your Rating ",
+          hover_see_only_first_label_text: "See only",
+          hover_see_only_second_label_text: "star reviews",
+          total_review_text: "reviews",
+          customer_review_text: "Customer Reviews",
+          thankyou_note: "Thank you for this valuable feedback",
+          no_review_to_give_a_review_text: "review this product",
+          no_review_text: "No reviews yet. Be the first to",
+          show_more_review_btn_text: "Show More Reviews",
+      };
+  }
+</script>
+<script>
+  (window.sarMReviews = ''),
+    (window.sarMMaxReviewImages = 3),
+    (window.sarmUser = 'sarm-user'),
+    (document.onreadystatechange = function () {
+      if ('complete' === document.readyState)
+        try {
+          var e = document.getElementById('sar-asset-container'),
+            t = 0;
+          if (
+            ((window.pageSize = window.innerWidth),
+            (window.sarMReviewFilter = !1),
+            (window.sarMfilterRating = -1),
+            (window.reviewShowStartPosition = 0),
+            (window.sarMMasterParentMarginLeft = 0),
+            'product' == meta.page.pageType)
+          ) {
+            function a() {
+              let e = `<div id="sarm-give-review-myModal" class="sarm-give-review-modal" style="display: none;">\n                          <div id="sarm-give-review-modal-content" class="sarm-give-review-modal-content">\n                          <span id="sarm-give-review-close-icon" class="sarm-give-review-close">&times;</span>\n                              <div class="sarm-give-review-container">\n                                  <h4 class="sarm-give-revew-title">${sarmReviewLanguageSettings?.write_review_btn_text}</h4>\n                                  <form id="sarm-give-review-form" enctype="multipart/form-data">\n                                      <div class="sarm-give-review-body">\n                                          <div class="sarm-give-review-rating sarm-margin-top-12">\n                                              <p class="sarm-give-review-lebels" id="sarm-your-rating-title" data-sarm_rating="1">${sarmReviewLanguageSettings?.your_rating_label_text} <span class="sarm-required-ast">*</span></p>\n                                              <div>\n                                                  <svg onclick="sarmFillReviewRating(0)" class="sarm-give-review-svg" style="fill:#EDEDED" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -10 511.98685 511" height="20" width="20" preserveAspectRatio="none" xml:space="preserve" x="0px" y="0px"><path d="m510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0"></path></svg>\n                                                  <svg onclick="sarmFillReviewRating(1)" class="sarm-give-review-svg" style="fill:#EDEDED" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -10 511.98685 511" height="20" width="20" preserveAspectRatio="none" xml:space="preserve" x="0px" y="0px"><path d="m510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0"></path></svg>\n                                                  <svg onclick="sarmFillReviewRating(2)" class="sarm-give-review-svg" style="fill:#EDEDED" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -10 511.98685 511" height="20" width="20" preserveAspectRatio="none" xml:space="preserve" x="0px" y="0px"><path d="m510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0"></path></svg>\n                                                  <svg onclick="sarmFillReviewRating(3)" class="sarm-give-review-svg" style="fill:#EDEDED" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -10 511.98685 511" height="20" width="20" preserveAspectRatio="none" xml:space="preserve" x="0px" y="0px"><path d="m510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0"></path></svg>\n                                                  <svg onclick="sarmFillReviewRating(4)" class="sarm-give-review-svg" style="fill:#EDEDED" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -10 511.98685 511" height="20" width="20" preserveAspectRatio="none" xml:space="preserve" x="0px" y="0px"><path d="m510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0"></path></svg>\n                                              </div>\n                                          </div>\n                                          <input type="hidden" data-sarm_rating="1" name="rating" id="sarm-give-review-rating" value="">\n                                          <div class="sarm-give-revew-name-email sarm-margin-top-12">\n                                              <div>\n                                                  <p class="sarm-give-review-lebels">${sarmReviewLanguageSettings?.your_name_label_text}<span class="sarm-required-ast">*</span></p>\n                                                  <input data-sarm_name="1" class="sarm-form-control sarm-h-input" placeholder="Name" type="text" id="sarm-give-review-name" name="name">\n                                              </div>\n                                              <div>\n                                                  <p class="sarm-give-review-lebels">${sarmReviewLanguageSettings?.your_email_label_text}<span class="sarm-required-ast">*</span></p>\n                                                  <input class="sarm-form-control sarm-h-input" data-sarm_email="1" type="email" placeholder="Email" id="sarm-give-review-email" name="email">\n                                              </div>\n                                          </div>\n                                          <div class="sarm-give-review-text sarm-margin-top-12">\n                                              <p class="sarm-give-review-lebels">${sarmReviewLanguageSettings?.your_feedback_label_text}</p>\n                                              <textarea rows="4" id="sarm-give-review-text" name="feedback" placeholder="Enter your feedback here" class="sarm-form-control sarm-h-textarea"></textarea>\n                                          </div>\n                                          <div id="sarm-image-output-result" class="sarm-margin-top-12"> </div>\n                                          <div class="sarm-give-review-add-pic sarm-margin-top-12" id="sarm-give-review-add-pic">\n                                              <p class="sarm-give-review-lebels">${sarmReviewLanguageSettings?.add_images_btn_text}</p>\n                                              <input onchange="sarmFileChange(event)" class="sarm-review-files" name="file" id="sarm-review-files" type="file"></input>\n                                          </div>\n                                          <div class="sarm-give-review-submit sarm-margin-top-12">\n                                              <button class="submit-review" onclick="samrSubmitReview(event)">${sarmReviewLanguageSettings?.submit_review_btn_text}</button>\n                                              <button class="cancel-review" role="button" onclick="sarmCloseReviewModal(event)">${sarmReviewLanguageSettings?.cancel_review_btn_text}</button>\n                                          </div>\n                                      </div>\n                                  </form>\n                              </div>\n                          </div>\n                  \n                      </div>`,
+                t = document.createElement('div');
+              (t.innerHTML = e),
+                document.getElementById('viva-reviews-container-div').prepend(t),
+                document.getElementById('sarm-give-review-myModal'),
+                (document.getElementById('sarm-give-review-close-icon').onclick = function (e) {
+                  window.sarmCloseReviewModal(e);
+                });
+            }
+            function i(e, t) {
+              return '' == e.value
+                ? (e.setAttribute('style', 'border:1px solid red !important; color: red !important'), t(!1), !1)
+                : (e.setAttribute('style', 'border:1px solid #ced4da !important; color: black !important'), t(!0), !0);
+            }
+            function n() {
+              let e = 4;
+              return (
+                window.pageSize < 768 && (e = sarmLayoutsFromMeta?.reviews_2_columns_mobile ? 2 : 1),
+                window.pageSize >= 768 && window.pageSize < 1e3 && (e = 2),
+                window.pageSize >= 1e3 && window.pageSize < 1200 && (e = 3),
+                (window.matOnRow = e),
+                e
+              );
+            }
+            function r() {
+              let e = 10;
+              return (
+                window.pageSize < 768 && (e = sarmLayoutsFromMeta?.reviews_2_columns_mobile ? 7 : 10),
+                (window.matDriftBase = e),
+                e
+              );
+            }
+            function s() {
+              let e;
+              return (e = document.querySelector('.sar-review-container-div')), getComputedStyle(e);
+            }
+            async function o() {
+              try {
+                const e = await fetch(window.location.pathname + '.json');
+                if (e.ok) {
+                  (await e.json()).product.title;
+                  const t = p();
+                  let a = window.sarMReviews.length;
+
+                  //Avis modifier en haut fiche produit
+                  if (a === 28) {
+                    a = 313;
+                  }
+
+                  const i = document.createElement('div');
+                  i.classList.add('sarm-underTitleReviewContainer');
+                  const n = document.createElement('div');
+                  (n.id = 'sar-stars-beneath-title'), (n.style.display = 'flex'), (n.style.alignItems = 'center');
+                  Math.floor(t);
+                  for (let e = 1; e <= 5; e++) {
+                    const e = document.createElement('span');
+                    e.classList.add('sar-star'),
+                      (e.style.color = '#F5A623'),
+                      (e.style.fontSize = '24px'),
+                      (e.innerHTML = '&#9733;'),
+                      n.appendChild(e);
+                  }
+                  const r = document.createElement('div');
+                  (r.style.marginLeft = '8px'), (r.style.fontSize = '16px'), (r.innerHTML = t);
+                  const s = document.createElement('div');
+                  s.classList.add('sarm-avg-total-count'),
+                    (s.style.marginLeft = '8px'),
+                    (s.style.fontSize = '14px'),
+                    (s.innerHTML = `(${a} ${sarmReviewLanguageSettings?.total_review_text})`),
+                    i.appendChild(n),
+                    i.appendChild(r),
+                    i.appendChild(s);
+                  const o = document.querySelector('.product-single__title');
+                  o.parentNode.insertBefore(i, o.nextSibling);
+                  const d = document.getElementById('sarmyModal');
+                  if (d) {
+                    const e = d.getElementsByClassName('sarm-review-files');
+                    Array.from(e).forEach((e) => {
+                      (e.style.maxWidth = '100%'), (e.style.height = 'auto');
+                    });
+                  }
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            }
+            function d() {
+              try {
+                let e = document.getElementById('sarMShortDetails');
+                e.classList.add('sarm-short-details-no-revew');
+                let t = document.createElement('h2');
+                (t.innerHTML = sarmReviewLanguageSettings?.customer_review_text),
+                  t.classList.add('sar-customer-review-text', 'sar-customer-review-text-no-review');
+                let a = document.createElement('div');
+                a.classList.add('sarM-short-details-container', 'sarM-short-details-container-no-review'),
+                  (a.innerHTML = `\n                              <span>${sarmReviewLanguageSettings?.no_review_text}&nbsp;</span> \n                              <span style="color:blue;cursor:pointer" onclick="sarmOpenGiveReviewModal(event)"> \n                                  ${sarmReviewLanguageSettings?.no_review_to_give_a_review_text}\n                              </span>\n                          `);
+                let i = document.createElement('div');
+                i.classList.add('sarm-give-review-btn-div', 'sarm-give-review-btn-div-no-review');
+                let n = document.createElement('div');
+                n.classList.add('sarm-button-inner-container');
+                let r = document.createElement('button');
+                r.classList.add('sarm-give-review-btn'),
+                  (r.innerHTML = sarmReviewLanguageSettings?.give_review_btn_text),
+                  (r.id = 'sar-give-review-btn'),
+                  r.addEventListener('click', (e) => {
+                    window.sarmOpenGiveReviewModal(e);
+                  }),
+                  n.append(r);
+                let s = document.createElement('div');
+                (s.innerHTML = ''),
+                  s.classList.add('sarm-give-review-text-container'),
+                  s.addEventListener('click', () => {
+                    window.open('https://apps.shopify.com/vivareviews');
+                  }),
+                  (sarmLayoutsFromMeta?.remove_branding && 0 != sarmLayoutsFromMeta?.remove_branding) || n.append(s),
+                  i.append(n);
+                let o = document.createElement('div');
+                o.id = 'sarM-master-short-container';
+                let d = document.createElement('div');
+                d.classList.add('sarm-short-review-and-button-container'),
+                  d.append(a),
+                  d.append(i),
+                  o.append(t),
+                  o.append(d),
+                  e.append(o);
+              } catch (e) {
+                console.log('sarShortDetailsDraw', e);
+              }
+            }
+            function l() {
+              if (window.sarMReviews.length > 0)
+                try {
+                  let e = document.createElement('div');
+                  e.classList.add('sarM-short-details-container');
+                  let t = document.createElement('div');
+                  t.classList.add('sarM-average-details');
+                  let a = p(),
+                    i = document.createElement('div');
+                  i.classList.add('sarm-heighlited-rating-div'),
+                    (i.innerHTML = "<h3 class='sarm-heighlited-rating-text'>" + a + '</h3>');
+                  let n = document.createElement('div');
+                  n.id = 'sarMavgRating-short-details';
+                  let r = Math.floor(a);
+                  for (let e = 1; e <= 5; e++)
+                    if (e <= r) n.append(h(14, 14));
+                    else if (e == r + 1) {
+                      let e = (a - Math.floor(a)).toFixed(2);
+                      (e *= 100), 0 == e && (e = 100), n.append(h(14, 14, '#EDEDED', e));
+                    } else e > r + 1 && n.append(h(14, 14, '#EDEDED'));
+                  (n.style.width = '70px'), (n.style.margin = '0px auto'), i.append(n);
+                  let s = document.createElement('div');
+                  let nombreDAvis = window.sarMReviews.length;
+                  //Avis modifier bas de la page avis
+                  if (nombreDAvis === 28) {
+                    nombreDAvis = 313;
+                  }
+                  (s.innerHTML =
+                    "<h4 class='sarm-bottom-heighlited-text'>" +
+                    nombreDAvis +
+                    ' ' +
+                    sarmReviewLanguageSettings?.total_review_text +
+                    '</h4>'),
+                    i.append(s),
+                    t.append(i);
+
+                  let o = document.createElement('div');
+                  o.classList.add('sarm-short-rating-details');
+                  let d = document.createElement('div');
+                  d.classList.add('sarm-rating-details-container-div');
+                  let l = document.createElement('ul');
+                  l.classList.add('sarm-rating-list'),
+                    l.append(m(5)),
+                    l.append(m(4)),
+                    l.append(m(3)),
+                    l.append(m(2)),
+                    l.append(m(1)),
+                    d.append(l),
+                    o.append(d),
+                    e.append(t),
+                    e.append(o);
+                  let c = document.getElementById('sarMShortDetails'),
+                    g = document.createElement('h2');
+                  (g.innerHTML = sarmReviewLanguageSettings?.customer_review_text),
+                    g.classList.add('sar-customer-review-text');
+                  let w = document.createElement('div');
+                  w.classList.add('sarm-give-review-btn-div');
+                  let v = document.createElement('div');
+                  v.classList.add('sarm-button-inner-container');
+                  let u = document.createElement('button');
+                  u.classList.add('sarm-give-review-btn'),
+                    (u.innerHTML = sarmReviewLanguageSettings?.give_review_btn_text),
+                    (u.id = 'sar-give-review-btn'),
+                    u.addEventListener('click', (e) => {
+                      window.sarmOpenGiveReviewModal(e);
+                    }),
+                    v.append(u);
+                  let x = document.createElement('div');
+                  (x.innerHTML = ''),
+                    x.classList.add('sarm-give-review-text-container'),
+                    x.addEventListener('click', () => {
+                      window.open('https://apps.shopify.com/vivareviews');
+                    }),
+                    (sarmLayoutsFromMeta?.remove_branding && 0 != sarmLayoutsFromMeta?.remove_branding) || v.append(x),
+                    w.append(v);
+                  let f = document.createElement('div');
+                  f.id = 'sarM-master-short-container';
+                  let y = document.createElement('div');
+                  if (
+                    (y.classList.add('sarm-short-review-and-button-container'),
+                    y.append(e),
+                    y.append(w),
+                    f.append(g),
+                    f.append(y),
+                    c.append(f),
+                    window.pageSize < 768)
+                  ) {
+                    let e = document.getElementById('sarm-list-item-rating-5').offsetWidth;
+                    (e -= 70),
+                      document.querySelectorAll('.sarm-progress-bar').forEach((t) => {
+                        t.style.width = e + 'px';
+                      });
+                  }
+                } catch (e) {
+                  console.log('sarShortDetailsDraw', e);
+                }
+            }
+            function m(e) {
+              let t = 0;
+              window.sarMReviews.forEach((a) => {
+                a.rating == e && t++;
+              });
+
+              // Avis colonne 5 étoiles
+              let nombreDeComptes = t;
+              if (e === 5 && window.sarMReviews.length === 28) {
+                nombreDeComptes = 306;
+              }
+
+              let a = Math.ceil((parseInt(t) / parseInt(window.sarMReviews.length)) * 100),
+                i = document.createElement('li');
+              i.id = 'sarm-list-item-rating-' + e;
+              let n = document.createElement('div');
+              n.classList.add('sarm-fix-rating-num-container'),
+                (n.innerHTML = "<span class='sarm-specific-rating'>" + e + '</span>');
+              let r = document.createElement('div');
+              r.append(h(18, 18)), n.append(r), i.append(n);
+              let s = document.createElement('div');
+              s.classList.add('sarm-progress-bar-wrap');
+              let o = document.createElement('div');
+              o.classList.add('sarm-progress-bar');
+              let d = document.createElement('div');
+              d.style.maxWidth = a + '%';
+              let l = document.createElement('span');
+              l.classList.add('sarm-count-bar'),
+                (l.innerHTML = nombreDeComptes),
+                o.append(d),
+                s.append(o),
+                i.append(s),
+                i.append(l);
+              let m = document.createElement('div');
+              return (
+                m.classList.add('sarm-tooltip', 'sar-tooltip-no-' + e),
+                (m.innerText =
+                  sarmReviewLanguageSettings?.hover_see_only_first_label_text +
+                  ' ' +
+                  e +
+                  ' ' +
+                  sarmReviewLanguageSettings?.hover_see_only_second_label_text),
+                i.append(m),
+                i.addEventListener('mouseover', () => {
+                  document.getElementsByClassName('sar-tooltip-no-' + e)[0].style.visibility = 'visible';
+                }),
+                i.addEventListener('mouseout', () => {
+                  document.getElementsByClassName('sar-tooltip-no-' + e)[0].style.visibility = 'hidden';
+                }),
+                i.addEventListener('click', (t) => {
+                  if ((t.stopPropagation(), (window.reviewShowStartPosition = 0), e == window.sarMfilterRating))
+                    (window.sarMfilterRating = -1), (window.sarMReviews = window.preservedSarMReviews);
+                  else {
+                    window.sarMfilterRating = e;
+                    let t = [];
+                    window.preservedSarMReviews.forEach((a) => {
+                      a.rating == e && t.push(a);
+                    }),
+                      (window.sarMReviews = t);
+                  }
+                  let a = document.querySelectorAll('.sar-review-container-div');
+                  (function (e) {
+                    for (let t = 1; t < 6; t++) {
+                      let a = document.getElementById('sarm-list-item-rating-' + t);
+                      t != e && -1 != e
+                        ? a.classList.add('sarm-list-item-deactive')
+                        : a.classList.remove('sarm-list-item-deactive');
+                    }
+                  })(window.sarMfilterRating),
+                    a.length > 0 && a.forEach((e) => e.remove()),
+                    window.sarMReviews.length > 0 && g();
+                }),
+                i
+              );
+            }
+            function p() {
+              if (0 == window.sarMReviews.length) return 0;
+              let e = window.sarMReviews.length,
+                t = 0;
+              return (
+                window.sarMReviews.forEach((e) => {
+                  t = parseInt(t + e.rating);
+                }),
+                (t / e).toFixed(2)
+              );
+            }
+            function c(e) {
+              let t = e.match(/products\/(.*?)$/)[1],
+                a = t.match(/\?([^&=]+)=([^&=]+)(?:&([^&=]+)=([^&=]+))*$/);
+              return null == a ? t : t.replace(a[0], '');
+            }
+            function g() {
+              if (window.sarMReviews.length > 0) {
+                let e = document.getElementById('sarShowMoreDiv');
+                e && e.remove(), (window.container = document.getElementById('sarMContainer'));
+                let t = document.getElementById('sReviewScriptParent');
+                if ('' == t.style.height) t.style.height = '2000px';
+                else {
+                  let e = t.style.height.replace('px', '');
+                  (e = parseInt(parseInt(e) + 1300)), (t.style.height = e + 'px');
+                }
+                w(window.reviewShowStartPosition);
+              }
+            }
+            async function w(a) {
+              try {
+                let o = document.createElement('div');
+                o.classList.add('sar-review-container-div'), (o.id = 'reviewContainerDiv' + a);
+                let d = document.createElement('div');
+                d.classList.add('sar-review-div', 'sar-text-center');
+                let l = document.createElement('div');
+                l.classList.add('sarimagediv'), (l.id = 'sarimagediv' + a), l.setAttribute('data-review-id', a);
+                let m = [];
+                try {
+                  m = JSON.parse(window.sarMReviews[a].photos);
+                } catch (e) {
+                  m = window.sarMReviews[a].photos;
+                }
+                let p,
+                  c = 0,
+                  h = document.createElement('img');
+                var i;
+                if (m.length > 0)
+                  (p = m[0]),
+                    (await ((i = m[0]),
+                    new Promise((e, t) => {
+                      let a = new Image();
+                      (a.onload = function () {
+                        this.width > 0 && e(this), e(!1);
+                      }),
+                        (a.onerror = function () {
+                          e(!1);
+                        }),
+                        (a.src = i);
+                    }))) || (c = 1);
+                else (p = 'https://vivareviews.com/emni.jpg'), (c = 1);
+                c && (p = 'https://vivareviews.com/emni.jpg'),
+                  (h.src = p),
+                  (h.onload = function (a) {
+                    try {
+                      var i, p;
+                      let x,
+                        y,
+                        b,
+                        L,
+                        R = 212;
+                      if (((R = window.pageSize >= 768 ? 280 : window.pageSize / 2), 0 == c)) {
+                        let e = h.height,
+                          t = h.width;
+                        (x = ((e * R) / t).toFixed(2)),
+                          (window['sar_image_original' + a] = x),
+                          window.pageSize > 767 && (h.style.height = x + 'px'),
+                          h.classList.add('sarimage'),
+                          (h.id = 'sarimage_i' + a + '_j0'),
+                          l.append(h),
+                          d.append(l);
+                      }
+                      m.length > 1 &&
+                        ((i = l),
+                        (p = m.length),
+                        (y = document.createElement('div')).classList.add('sarimagecountdiv'),
+                        (b = document.createElement('span')).setAttribute('style', 'font-size:14px; margin-right:5px'),
+                        (b.innerHTML = p),
+                        y.append(b),
+                        (L = document.createElement('div')).setAttribute(
+                          'style',
+                          'height:17px; margin:auto; display:block'
+                        ),
+                        (L.innerHTML =
+                          '<svg viewBox="0 0 20 20" height="17px" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.74 1.786A1.5 1.5 0 017.059 1h5.855a1.5 1.5 0 011.315.777l.55 1c.04.074.073.148.1.223H18.5A1.5 1.5 0 0120 4.5v11a1.5 1.5 0 01-1.5 1.5h-17A1.5 1.5 0 010 15.5v-11A1.5 1.5 0 011.5 3h3.603c.025-.072.057-.144.095-.214l.542-1zM2 5h3v2H2V5zm12 5a4 4 0 11-8 0 4 4 0 018 0z" fill="#5C5F62"/></svg>'),
+                        y.append(L),
+                        i.append(y),
+                        (l.style.cursor = 'pointer'));
+                      let S = document.createElement('div'),
+                        _ = document.createElement('div');
+                      _.classList.add('saruserdiv');
+                      let k = document.createElement('div');
+                      k.classList.add(
+                        'sar-align-items-md-center',
+                        'margin-flag-name',
+                        'sar-align-items-sm-center',
+                        'align-items-col-center',
+                        'sar-w-100',
+                        'content-container-divs'
+                      ),
+                        (k.style.display = 'inline-flex');
+                      let z = document.createElement('img');
+                      z.setAttribute('loading', 'lazy'),
+                        (z.src =
+                          'https://sttflagservice.s3.amazonaws.com/png/' +
+                          window.sarMReviews[a].country.toLowerCase() +
+                          '.png'),
+                        (z.style.width = '22px'),
+                        sarmLayoutsFromMeta?.show_flags && k.append(z);
+                      let I = document.createElement('span');
+                      I.classList.add('sarname'),
+                        (I.innerHTML =
+                          '' == window.sarMReviews[a].display_name
+                            ? window.sarMReviews[a].name
+                            : window.sarMReviews[a].display_name),
+                        k.append(I),
+                        _.append(k),
+                        S.append(_);
+                      let B = document.createElement('div');
+                      B.classList.add('sarratingdiv', 'content-container-divs');
+                      let D = document.createElement('div');
+                      D.classList.add('sar-float-left'), D.append(u(window.sarMReviews[a].rating)), B.append(D);
+                      let T = document.createElement('div');
+                      T.classList.add('sarDateDiv', 'content-container-divs', 'sar-float-right');
+                      let A = window.sarMReviews[a].date,
+                        C = '';
+                      if ((void 0 !== A && (C = A.split('T', 1)[0]), '' != C)) {
+                        let e = document.createElement('span');
+                        (e.innerHTML = C), T.append(e);
+                      }
+                      B.append(T), S.append(B);
+                      let H = document.createElement('div');
+                      H.classList.add('sar-col-md-12', 'sar-col-sm-12', 'col-12', 'sarcontentdiv');
+                      let P = document.createElement('p');
+                      P.classList.add('content-container-divs', 'sar-pb-px');
+                      let F = '';
+                      try {
+                        (F = window.sarMReviews[a].raw_content.substring(0, 200)),
+                          window.sarMReviews[a].raw_content.length > 200 && (F += ' ...');
+                      } catch (e) {}
+                      (P.innerHTML = F),
+                        H.append(P),
+                        S.append(H),
+                        S.classList.add('all-content-container'),
+                        d.append(S),
+                        o.append(d),
+                        window.container.append(o),
+                        d.addEventListener('click', function (i) {
+                          i.stopPropagation(),
+                            (window.currently_showing_sar_image_index = a),
+                            (function (a, i, n) {
+                              null != document.getElementById('sarmyModal') && 1 == t && f(),
+                                setTimeout(() => {
+                                  t = 1;
+                                }, 1e3);
+                              let r = document.createElement('div');
+                              (r.id = 'sarmyModal'), r.classList.add('sarmodal');
+                              let s = document.createElement('span');
+                              s.classList.add('sarclose', 'sarcursor'),
+                                s.addEventListener('click', (e) => {
+                                  f();
+                                }),
+                                (s.innerHTML = '&times;'),
+                                r.append(s);
+                              let o = document.createElement('div');
+                              o.classList.add('sarm-modal-wrapper');
+                              let d = document.createElement('div');
+                              d.classList.add('sarmodal-content'),
+                                (d.style.width = 'auto'),
+                                window.pageSize < 768 && (d.style.width = '100%');
+                              let l = document.createElement('div');
+                              l.style.width = 'auto';
+                              let m = [];
+                              try {
+                                m = JSON.parse(window.sarMReviews[a].photos);
+                              } catch (e) {
+                                m = window.sarMReviews[a].photos;
+                              }
+                              for (let e = 0; e < m.length; e++) {
+                                let t = document.createElement('div');
+                                t.classList.add('sarmySlides');
+                                let a = document.createElement('div');
+                                a.classList.add('sarnumbertext'),
+                                  (a.innerHTML = parseInt(e + 1) + '/' + parseInt(m.length)),
+                                  t.append(a);
+                                let i = document.createElement('img');
+                                i.setAttribute('loading', 'lazy'),
+                                  (i.src = m[e]),
+                                  window.currently_showing_sar_image_index,
+                                  i.classList.add('sar-main-light-box-image'),
+                                  i.classList.add('responsive-image'),
+                                  t.append(i),
+                                  l.append(t);
+                              }
+                              let p = document.createElement('a');
+                              p.classList.add('sarprev'),
+                                p.addEventListener('click', () => {
+                                  E(-1);
+                                }),
+                                (p.innerHTML = '&#10094;'),
+                                l.append(p);
+                              let c = document.createElement('a');
+                              c.classList.add('sarnext'),
+                                c.addEventListener('click', () => {
+                                  E(1);
+                                }),
+                                (c.innerHTML = '&#10095;'),
+                                l.append(c),
+                                d.append(l);
+                              let g = document.createElement('div'),
+                                w = document.createElement('ul');
+                              w.classList.add('sarMUl');
+                              for (let e = 0; e < m.length; e++) {
+                                let t = document.createElement('li');
+                                t.classList.add('sarcolumn');
+                                let a = document.createElement('img');
+                                a.setAttribute('loading', 'lazy'),
+                                  (a.src = m[e]),
+                                  a.classList.add('sardemo', 'sarcursor'),
+                                  a.addEventListener('click', () => {
+                                    M(parseInt(e + 1));
+                                  }),
+                                  t.append(a),
+                                  w.append(t);
+                              }
+                              g.append(w), d.append(g), o.append(d), r.append(o), document.body.append(r);
+                              let v = a,
+                                h = document.createElement('div');
+                              h.classList.add('sar-review-description');
+                              let x = document.createElement('div'),
+                                y = document.createElement('div'),
+                                b = document.createElement('div');
+                              b.classList.add('saruserdiv', 'sar-text-center');
+                              let L = document.createElement('div');
+                              L.classList.add(
+                                'sar-align-items-md-center',
+                                'margin-flag-name',
+                                'sar-mt-2',
+                                'sar-align-items-sm-center',
+                                'align-items-col-center',
+                                'sar-w-100',
+                                'content-container-divs'
+                              ),
+                                (L.style.display = 'inline-flex');
+                              let R = document.createElement('img');
+                              R.setAttribute('loading', 'lazy'),
+                                (R.style.width = '22px'),
+                                (R.src =
+                                  'https://sttflagservice.s3.amazonaws.com/png/' +
+                                  window.sarMReviews[v].country.toLowerCase() +
+                                  '.png'),
+                                L.append(R);
+                              let S = document.createElement('span');
+                              S.classList.add('sarname'),
+                                (S.innerHTML =
+                                  '' == window.sarMReviews[v].display_name
+                                    ? window.sarMReviews[v].name
+                                    : window.sarMReviews[v].display_name),
+                                L.append(S),
+                                b.append(L),
+                                y.append(b);
+                              let _ = document.createElement('div');
+                              _.classList.add('sarratingdiv', 'content-container-divs');
+                              let k = document.createElement('div');
+                              k.classList.add('sar-col-md-12', 'sar-col-sm-12', 'col-12'),
+                                k.append(u(window.sarMReviews[v].rating)),
+                                _.append(k),
+                                y.append(_);
+                              let z = document.createElement('div');
+                              z.classList.add('sar-col-md-12', 'sar-col-sm-12', 'col-12', 'sarcontentdiv');
+                              let I = document.createElement('p');
+                              I.classList.add('content-container-divs'),
+                                'string' == typeof window.sarMReviews[v].raw_content
+                                  ? (I.innerHTML = window.sarMReviews[v].raw_content)
+                                  : (I.innerHTML = ''),
+                                z.append(I),
+                                y.append(z);
+                              let B = document.createElement('div');
+                              B.classList.add('sarDateDiv', 'content-container-divs');
+                              let D,
+                                T,
+                                A,
+                                C,
+                                H = window.sarMReviews[v].date,
+                                P = '';
+                              if ((void 0 !== H && (P = H.split('T', 1)[0]), '' != P)) {
+                                let e = document.createElement('span');
+                                (e.innerHTML = P), B.append(e);
+                              }
+                              y.append(B),
+                                x.append(y),
+                                h.append(x),
+                                o.append(h),
+                                (document.getElementById('sarmyModal').style.visibility = 'visible'),
+                                (document.getElementById('sarmyModal').style.opacity = '0'),
+                                (D = document.querySelector('.sarmodal')),
+                                (A = (T = getComputedStyle(D)).width.replace('px', '')),
+                                (A = parseInt(A)),
+                                ((C = document.getElementById('sarmyModal')).style.left = '50%'),
+                                (C.style.marginLeft = '-' + A / 2 + 'px'),
+                                setTimeout(() => {
+                                  (C.style.opacity = '1'),
+                                    window.pageSize < 768
+                                      ? (C.style.top = '10px')
+                                      : ((C.style.top = '50%'),
+                                        (C.style.marginTop = -C.getBoundingClientRect().height / 2 + 'px')),
+                                    sarMSetTransform(C);
+                                }, 250),
+                                e.classList.add('sarm-body-dimmer'),
+                                M(1);
+                            })(a - 1);
+                        }),
+                        (function (e, t) {
+                          let a = r(),
+                            i = n(),
+                            o = t % i,
+                            d = s().width.replace('px', '') * o;
+                          if (((e.style.left = d + a * o + 'px'), t < i || 0 == t)) e.style.top = '0';
+                          else {
+                            let n = document.getElementById('reviewContainerDiv' + (t - i));
+                            if (null != n) {
+                              let t = n.scrollHeight,
+                                i = n.style.top;
+                              (i = i.replace('px', '')), (i = parseInt(i)), (e.style.top = parseInt(i + t + a) + 'px');
+                            }
+                          }
+                          !(function () {
+                            var e, t, a;
+                            let i,
+                              o = r(),
+                              d = n(),
+                              l =
+                                ((e = o),
+                                (t = s().width.replace('px', '')),
+                                (a = d),
+                                (i = window.pageSize - (t * a + a * e)),
+                                i > 0 ? i / 2 : 0);
+                            if (window.pageSize < 768) l = 0;
+                            else {
+                              let e = l - document.getElementById('sar-asset-container').getBoundingClientRect().x,
+                                t = document.getElementById('sarMMasterParent');
+                              (t.style.position = 'relative'),
+                                (t.style.left = e + 'px'),
+                                (window.sarMMasterParentMarginLeft = l);
+                              let a = window.pageSize - 2 * l,
+                                i = document.getElementById('sarMShortDetails');
+                              (i.style.width = a + 'px'), (i.style.position = 'relative'), (i.style.left = e + 'px');
+                            }
+                          })();
+                        })(o, a),
+                        a++,
+                        v(),
+                        a >= window.sarMReviews.length || a >= parseInt(window.reviewShowStartPosition + 12)
+                          ? (function (e) {
+                              let t = v();
+                              if (e < window.sarMReviews.length) {
+                                let e,
+                                  a,
+                                  i,
+                                  n,
+                                  r = document.createElement('div');
+                                (r.id = 'sarShowMoreDiv'),
+                                  (r.style.top = t - 70 + 'px'),
+                                  (r.style.position = 'absolute'),
+                                  r.append(
+                                    ((e = document.createElement('button')),
+                                    e.classList.add('sarShowMore'),
+                                    (e.innerHTML = sarmReviewLanguageSettings?.show_more_review_btn_text),
+                                    e.addEventListener('click', function (e) {
+                                      e.stopPropagation(),
+                                        window.sarMReviews.length < parseInt(window.reviewShowStartPosition + 12)
+                                          ? (window.reviewShowStartPosition =
+                                              window.sarMReviews.length - window.reviewShowStartPosition)
+                                          : (window.reviewShowStartPosition = parseInt(
+                                              window.reviewShowStartPosition + 12
+                                            )),
+                                        g();
+                                    }),
+                                    e)
+                                  ),
+                                  document.getElementById('sarMContainer').append(r),
+                                  (a = document.querySelector('.sarShowMore')),
+                                  window.pageSize > 767 && (a.style.width = '200px'),
+                                  (i = window.innerWidth / 2),
+                                  (n = a.getBoundingClientRect().width / 2),
+                                  window.pageSize > 767 &&
+                                    ((a.style.position = 'absolute'),
+                                    (a.style.left = i - n - window.sarMMasterParentMarginLeft + 'px'));
+                              }
+                            })(a)
+                          : w(a);
+                    } catch (e) {
+                      console.log('inner side of asycSarMDraw', e);
+                    }
+                  }.bind(null, a));
+              } catch (e) {
+                console.log('asycSarMDraw', e);
+              }
+            }
+            function v() {
+              let e = document.getElementById('sarMContainer').scrollHeight,
+                t = document.getElementById('sarMShortDetails').getBoundingClientRect().height;
+              return (
+                (document.getElementById('viva-reviews-container-div').style.height = parseInt(e + 180 + t) + 'px'),
+                (document.getElementById('sReviewScriptParent').style.height = parseInt(e + 180 + t) + 'px'),
+                parseInt(e + 100)
+              );
+            }
+            function u(e) {
+              let t = document.createElement('div');
+              t.classList.add('sar-float-left');
+              for (let a = 0; a < e; a++) t.append(h());
+              return t;
+            }
+            function h(e = '20', t = '20', a = '#ffc107', i = 100) {
+              let n = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+              if (
+                (n.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink'),
+                n.setAttribute('viewBox', '0 -10 511.98685 511'),
+                n.setAttribute('height', e),
+                n.setAttribute('width', t),
+                n.setAttribute('preserveAspectRatio', 'none'),
+                n.setAttribute('xml:space', 'preserve'),
+                n.setAttribute('x', '0px'),
+                n.setAttribute('y', '0px'),
+                i < 100)
+              ) {
+                let e = document.createElementNS('http://www.w3.org/2000/svg', 'defs'),
+                  t = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+                t.setAttribute('id', 'half_grad');
+                let r = [
+                  { color: '#ffc107', offset: i + '%' },
+                  { color: a, offset: (100 - i).toFixed(1) + '%' },
+                ];
+                for (let e = 0, a = r.length; e < a; e++) {
+                  let a = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                  a.setAttribute('offset', r[e].offset), a.setAttribute('stop-color', r[e].color), t.appendChild(a);
+                }
+                e.appendChild(t), n.append(e);
+              }
+              let r = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              return (
+                r.setAttributeNS(
+                  null,
+                  'd',
+                  'm510.652344 185.902344c-3.351563-10.367188-12.546875-17.730469-23.425782-18.710938l-147.773437-13.417968-58.433594-136.769532c-4.308593-10.023437-14.121093-16.511718-25.023437-16.511718s-20.714844 6.488281-25.023438 16.535156l-58.433594 136.746094-147.796874 13.417968c-10.859376 1.003906-20.03125 8.34375-23.402344 18.710938-3.371094 10.367187-.257813 21.738281 7.957031 28.90625l111.699219 97.960937-32.9375 145.089844c-2.410156 10.667969 1.730468 21.695313 10.582031 28.09375 4.757813 3.4375 10.324219 5.1875 15.9375 5.1875 4.839844 0 9.640625-1.304687 13.949219-3.882813l127.46875-76.183593 127.421875 76.183593c9.324219 5.609376 21.078125 5.097657 29.910156-1.304687 8.855469-6.417969 12.992187-17.449219 10.582031-28.09375l-32.9375-145.089844 111.699219-97.941406c8.214844-7.1875 11.351563-18.539063 7.980469-28.925781zm0 0'
+                ),
+                i < 100 ? r.setAttribute('fill', 'url(#half_grad)') : r.setAttribute('fill', a),
+                n.append(r),
+                n
+              );
+            }
+            function x(e, t, a = null, i, n) {
+              let r = new XMLHttpRequest();
+              if (!r) return alert('Please Try Again'), !1;
+              (r.onreadystatechange = function () {
+                if (4 === this.readyState && 200 === this.status) {
+                  let e = this.responseText;
+                  n(e);
+                } else 4 == this.readyState && this.status > 400 && n('api error');
+              }),
+                r.open(t, e, !0),
+                r.setRequestHeader('Content-type', i),
+                null != a ? r.send(a) : r.send();
+            }
+            function f() {
+              (t = 0), document.getElementById('sarmyModal').remove(), e.classList.remove('sarm-body-dimmer');
+            }
+            (window.sReviewProductId = meta.product.id),
+              (y = function () {
+                let t;
+                (function () {
+                  try {
+                    let t = document.createElement('div');
+                    t.id = 'sReviewScriptParent';
+                    let a = document.createElement('div');
+                    a.id = 'semi-parent';
+                    let i = document.createElement('div');
+                    (i.id = 'sarMContainer'), a.append(i), t.append(a);
+                    let n = document.createElement('div');
+                    (n.id = 'sarMShortDetails'), document.getElementById('viva-reviews-container-div').prepend(n);
+                    let r = document.createElement('div');
+                    (r.id = 'sarMMasterParent'), r.append(t);
+                    let s = document.createElement('div');
+                    s.classList.add('shopify-section'),
+                      (s.id = 'sar-shopify-section'),
+                      s.append(r),
+                      e.appendChild(s),
+                      (function () {
+                        if (sarmLayoutsFromMeta?.reviews_2_columns_mobile) {
+                          let e = document.createElement('style');
+                          (e.innerHTML =
+                            '@media (max-width:767px){.sar-review-container-div{width:50%!important;padding:3px 0!important}.sarDateDiv{margin-bottom:0;float:left!important}.all-content-container{padding:0 10px}.content-container-divs{margin:1px 0!important}.sarname{text-align:left!important}.saruserdiv{margin-top:0!important}}'),
+                            document.head.append(e);
+                        }
+                      })();
+                  } catch (e) {
+                    console.log('error in sarMInjectDiv', e);
+                  }
+                })(),
+                  (t = 'https://viva-fetch-review-bucket.s3.amazonaws.com/plans/' + Shopify.shop + '.json'),
+                  x(t, 'GET', (data = null), (header = ['application/x-www-form-urlencoded']), (e) => {
+                    let t, a;
+                    if (
+                      ((window.sarMPlan = JSON.parse(e)),
+                      window.sarMPlan.google_rich_snippet > 0 &&
+                        (document.querySelectorAll('script').forEach((e) => {
+                          'application/ld+json' == e.type && e.remove();
+                        }),
+                        (t = c(__st.pageurl)),
+                        x('/products/' + t + '.js', 'GET', (data = null), (header = ['application/json']), (e) => {
+                          e = JSON.parse(e);
+                          let t = document.createElement('script');
+                          t.type = 'application/ld+json';
+                          let a = { '@context': 'https://schema.org/', '@type': 'Product' };
+                          (a.name = e.title),
+                            '' != e.variants[0].sku && (a.sku = e.variants[0].sku),
+                            e.images.length > 0 && (a.image = e.images),
+                            e.description;
+                          let i = { '@type': 'AggregateRating' };
+                          (i.ratingValue = p()),
+                            (i.reviewCount = window.sarMReviews.length.toString()),
+                            (i.bestRating = '5'),
+                            (a.aggregateRating = i);
+                          let n,
+                            r = (e.price / 100).toFixed(2);
+                          n = 1 == e.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+                          let s = { '@type': 'Offer' };
+                          (s.price = r),
+                            (s.priceCurrency = 'USD'),
+                            (s.priceValidUntil = '2022-11-20'),
+                            (s.availability = n),
+                            (a.offers = s),
+                            (a = JSON.stringify(a)),
+                            t.append(a),
+                            document.head.append(t);
+                        })),
+                      ((a = document.createElement('style')).innerHTML =
+                        "#sarMavgRating-short-details,#sarm-image-output-result,.sarm-give-revew-name-email,.sarm-give-review-rating div,.sarm-give-review-submit{display:flex}.content-container-divs svg{display:inline;margin-right:5px!important}div:has(> .sarm-underTitleReviewContainer){flex-wrap:wrap}#sar-stars-beneath-title svg,.sarm-avg-rating svg{display:inline}.sarm-margin-top-12{margin-top:12px!important}.sarm-required-ast{position:relative;top:2px}.sarm-h-input{height:35px!important}.sarm-short-details-no-revew{margin:auto!important}.sarm-h-textarea{height:80px!important}.sarm-thank-you-mgs{text-align:center;font-size:20px;font-weight:700}.sarm-give-review-modal{display:none;position:fixed;z-index:10;padding-top:100px;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.4)}.sarm-give-review-modal-content{background-color:#fefefe;margin:auto;padding:20px;border:1px solid #888;width:80%}#sarm-give-review-form,.sarm-form-control{margin:0!important}#sReviewScriptParent,.sarm-form-control{width:100%!important}.sarm-give-review-close{color:#aaa;float:right;font-size:28px;font-weight:700}.sarm-give-review-close:focus,.sarm-give-review-close:hover{color:#000;text-decoration:none;cursor:pointer}.sarm-give-revew-name-email div:first-child{margin-right:10px}.sarm-give-revew-name-email div{width:50%}.sarm-give-review-add-pic input{width:100%;background:#fff;outline:0;padding:10px;border-radius:5px;color:#000;cursor:pointer;border:1px dotted gray}.sarm-form-control{display:block!important;max-width:100%!important;padding:.375rem .75rem!important;font-size:15px!important;line-height:16px!important;color:#495057!important;background-color:#fff!important;background-clip:padding-box;border:1px solid #ced4da!important;border-radius:.25rem!important;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out;text-align:left!important;font-family:Arial,Helvetica,sans-serif!important}#sReviewScriptParent,.sar-text-center{text-align:center!important}.sarm-form-control::placeholder{font-size:14px!important;font-family:Arial,Helvetica,sans-serif!important}.sarm-give-review-lebels{margin:0;font-weight:700;font-size:17px;font-family:Helvetica,Arial,sans-serif}.sarm-give-revew-title{margin:0;font-size:22px;font-weight:700}.sarm-give-review-svg:hover path{fill:#FFC107}.sarm-give-review-submit .submit-review{color:#fff;background:#000;font-size:16px;font-weight:700;border-radius:1px;outline:0;border:none;cursor:pointer;margin-right:7px;padding:10px;text-align:center}.sarm-give-review-submit .cancel-review{padding:10px!important;background-color:#fff!important;text-align:center;outline:0;border:1px solid #000;border-radius:1px;color:#000!important;cursor:pointer;font-size:15px;font-weight:700}.sarm-preview-image{max-width:45px;max-height:45px;width:auto;height:auto;margin-right:20px}.sarm-delete-preview-image{position:relative;right:20px;cursor:pointer;border-radius:9px;color:red;font-size:25px}#sarMContainer,.sarimagediv{position:relative!important}.sar-w-100{width:100%}.sarm-give-review-text-container{font-size:12px;cursor:pointer}.sarm-give-review-btn{color:#fff;background:#000;border:none;border-radius:5px;text-transform:capitalize;padding:10px;cursor:pointer;outline:0;font-size:15px}.content-container-divs,.sarDateDiv,.sarShowMore,.sarname{font-size:14px!important}#sar-stars-beneath-title svg,#sarMavgRating-short-details svg{width:14px!important;height:14px!important}.sarm-underTitleReviewContainer{display:inline-flex!important;margin:5px 0!important;cursor:pointer}.sar-pb-px{padding-bottom:6px!important;margin:0!important}.sarm-body-dimmer{opacity:.3!important;background-color:#000!important;z-index:100!important}.sar-float-left{float:left!important}.sar-float-right{float:right!important}.all-content-container{padding:12px}.content-container-divs{color:rgba(0,0,0,.8)!important}#sarMMasterParent{font-family:inherit}#semi-parent{width:100%;margin:0 auto}#sar-shopify-section{margin-top:5px}#sarMContainer{width:100%;background:#f2efef!important}#sarShowMoreDiv,.sarratingdiv{width:100%!important}#sarShowMoreDiv{position:absolute!important}.sarimage:hover{box-shadow:0 0 2px 1px rgba(0,140,186,.5)}.sarcontentdiv{overflow:hidden!important;text-overflow:ellipsis!important;text-align:left;display:-webkit-box;clear:both;-webkit-box-orient:vertical!important}.sarDateDiv{margin-top:0!important;margin-bottom:10px!important;color:rgba(0,0,0,.6)!important;text-align:left}.sarShowMore{margin:0 auto!important;display:block!important;border:1px solid #3c4246;background-color:inherit!important;padding:10px!important;letter-spacing:0!important;border-radius:5px;color:#000!important;cursor:pointer!important}.sar-hide-image{display:none!important}.show-image{display:inline-block!important}.sarimage{max-width:100%;border:none;border-radius:8px 8px 0 0!important;height:auto;width:100%}.sarMPImg,.sarimagediv,.saruserdiv{width:100%!important}.sarimagediv{display:block!important}.saruserdiv{margin-top:0!important}.sarname{padding:5px!important;font-weight:700!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.margin-flag-name{margin:0 auto!important}.sarMPImg{height:100%!important;padding:3px!important;border-radius:4px 4px 0 0!important}.sarimagecountdiv{position:absolute!important;top:8px!important;right:8px!important;z-index:3!important;color:#55514e!important;padding:2px 8px!important;font-weight:500!important;font-size:11px!important;-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;display:flex!important;line-height:inherit!important;background:#ffffffcf!important;border-radius:4px!important;cursor:pointer!important}.sarnumbertext{color:#000;font-size:14px;padding:1px 7px;position:absolute;top:-2px;font-weight:600;background:#ededed;border-radius:5px;left:-2px}.sarmodal-content{position:relative;background-color:#fff;display:inline-block;padding:0;width:300px;max-width:600px}.sarcaption-container{text-align:center;background-color:#ededed;padding:2px 16px;color:#fff}.sar-review-div{background:#fff;border-radius:8px;box-shadow:0 4px 12px rgb(0 0 0 / 8%);border:none;cursor:pointer}.sar-customer-review-text{font-size:25px;letter-spacing:0!important;text-transform:capitalize!important;font-weight:600;margin-bottom:25px!important}.sarbatch{float:left}.sardemo{opacity:.6}.saractive,.sardemo:hover{opacity:1}.sar-row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.col{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}.sar-align-items-center,.sar-align-items-md-center,.sar-align-items-sm-center{-ms-flex-align:center!important;align-items:center!important}.sar-mt-2,.sar-my-2{margin-top:.5rem!important}#sarmyModal{box-sizing:border-box!important}.sar-col-md-12,.sar-col-sm-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%;padding-left:0!important}.sarmodal{box-shadow:2px 3px 17px 4px rgb(0 0 0 / 12%);border-radius:6px!important;border:8px solid #ededed;visibility:hidden;position:fixed;z-index:112;padding-top:0;height:auto;background-color:#fff;overflow:auto}.sarM-short-details-container{padding:0;margin-top:0!important;margin-bottom:24px!important;position:relative;clear:both;min-height:50px;display:flex}.sarm-heighlited-rating-div{background-color:#bae2f50d;height:160px;padding:10px;border-radius:10px;margin:auto}.sarm-progress-bar,.sarnext:hover,.sarprev:hover{background-color:#ededed}.sarm-heighlited-rating-text{font-size:52px;text-align:center;font-weight:600;margin-top:20px!important;color:rgba(0,0,0,.8)}.sarm-bottom-heighlited-text{margin:2px auto auto!important;padding:2px!important;font-size:14px!important;letter-spacing:0!important;text-align:center!important}.sar-review-description,.sarm-count-bar{text-align:left}.sarm-specific-rating{font-size:17px;font-weight:600;width:15px!important}.sarm-rating-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;justify-items:center}.sarm-rating-list li{display:flex;flex-direction:row;align-items:center;padding-bottom:4px;position:relative}.sarm-list-item-deactive{opacity:.4!important}.sarm-fix-rating-num-container{width:50px;display:flex;align-items:center}.sarm-progress-bar-wrap{margin-right:9px}.sarm-progress-bar{width:176px;height:6px;border-radius:4px;position:relative;overflow:hidden}.sarm-progress-bar div{position:absolute;display:block;width:100%;height:6px;border-radius:4px;background-color:#ffc107!important}.sarm-count-bar{font-size:12px;font-weight:400;font-stretch:normal;font-style:normal;line-height:1.5;letter-spacing:normal;color:rgba(0,0,0,.6);white-space:nowrap}.sarclose,.sarnext,.sarprev{font-weight:700;position:absolute}.sarMUl{list-style:none!important;padding:0!important}.sarMUl li{width:50px;height:50px;border:1px solid #ededed;margin:1px}.sarMUl li img{height:48px;max-width:48px;border-radius:3px;display:block;margin:auto}.sarrow:after{content:'';display:table;clear:both}.sarclose{color:#ededed;z-index:15;font-size:33px}.sarclose:focus,.sarclose:hover{color:#999;text-decoration:none;cursor:pointer}.sarcursor{cursor:pointer}img.sarhover-shadow{transition:.3s}.sarhover-shadow:hover{box-shadow:0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19)}.sarnext{right:0}.sarnext,.sarprev{cursor:pointer!important;top:50%;width:auto;font-size:20px;transition:.6s;border-radius:0 3px 3px 0;user-select:none;-webkit-user-select:none;margin-top:-50px}.sar-review-container-div{position:absolute;height:100%}.sarm-rating-list li:hover{color:#ffc107;cursor:pointer}.sarm-tooltip{position:absolute;top:-4px;width:100%;left:256px;white-space:nowrap;font-size:12px;letter-spacing:0!important;color:#323231!important;visibility:hidden}@media (max-width:767px){#sReviewScriptParent{padding:0}.sarm-h-input{height:25px!important}.sarm-h-textarea{height:65px!important}#sarMMasterParent{padding:10px}#sarmyModal{height:100%;overflow-y:scroll}.sarrow>.sarcolumn{padding:0 8px}.sarcolumn{float:left;width:25%}.sarmodal{width:300px}.sarclose{top:-10px;right:5px}.sarm-tooltip,.sarmySlides{display:none}.sarnext,.sarprev{padding:16px;color:#fff}sarimg{margin-bottom:-4px}.sar-review-description{margin-top:8px;overflow-y:auto;width:auto;padding-left:10px;padding-right:10px}.sar-review-container-div{width:100%;margin:0 0 5px;padding:4px}.sarm-short-rating-details{width:95%;margin:auto;padding:10px 5px 5px}.sar-main-light-box-image{max-height:378px;max-width:498px;min-width:100px;min-height:200px;margin:auto;display:block}.sarM-short-details-container,.sarm-give-revew-name-email{display:block}.sarm-bottom-heighlited-text{text-align:center!important}.sar-customer-review-text{display:none!important}.sarm-give-revew-name-email div,.sarm-give-review-btn{width:100%}.sarm-give-review-btn-div{margin:10px}.sarm-give-review-text-container{text-align:center}.sarM-short-details-container-no-review{margin-top:0!important;margin-bottom:0!important}.sar-customer-review-text-no-review{margin-bottom:2px!important;display:block!important}.sarm-short-details-no-revew{width:95%}.sarm-give-review-btn-div-no-review{margin:0!important}}@media(min-width:300px){.sarmodal{left:3%}}@media(min-width:370px){.sarmodal{left:9%}}@media (min-width:768px){#viva-reviews-container-div{padding-top:50px}#sar-asset-container{position:absolute}#sar-shopify-section{margin-top:0}.sarm-modal-wrapper,.sarm-short-review-and-button-container{display:flex}.sarrow>.sarcolumn{padding:0 8px}.sarcolumn{float:left;width:25%}.sarmodal{width:722px}.sarclose{top:-10px;right:5px}.sarmySlides{display:none}.sarnext,.sarprev{padding:16px;color:#fff}.sarnext{right:0;border-radius:3px 0 0 3px}sarimg{margin-bottom:-4px}.sar-review-description{margin-top:8px;overflow-y:auto}.sar-review-container-div{width:280px;margin-bottom:5px}.sarm-short-rating-details{width:40%}.sarm-rating-details-container-div{width:80%;margin:auto}.sar-main-light-box-image{max-height:378px;max-width:498px;min-width:100px;min-height:200px;margin:auto;display:block}.sarm-button-inner-container{float:right}.sarm-give-review-btn-div{width:49.68%}.sarm-give-review-btn{width:140px}.sarM-short-details-container{width:50%}.sar-customer-review-text-no-review{margin-bottom:0!important}.sarM-short-details-container-no-review{margin-top:0!important}.sarm-short-details-no-revew{width:79%}.sarm-avg-total-count{white-space:nowrap}}@media (min-width:1000px){.sar-main-light-box-image{max-height:378px;max-width:498px;min-width:100px;min-height:200px;margin:auto;display:block}.sarrow>.sarcolumn{padding:0 8px}.sarcolumn{float:left;width:25%}.sarmodal{width:900px}.sarclose{top:10px;right:25px}.sarmySlides{display:none}.sarnext,.sarprev{padding:3px;color:#111010;background-color:rgba(255,255,255,.411)}sarimg{margin-bottom:-4px}.sar-review-description{overflow-y:auto;width:auto;padding-left:20px}.sar-review-description>div{padding:10px}.sar-review-container-div{width:280px}}@media (min-width:1200px){.sarmodal{width:1122px}}"),
+                      document.head.append(a),
+                      'undefined' != typeof sarmReviewsFromMeta &&
+                        'object' == typeof sarmReviewsFromMeta &&
+                        sarmReviewsFromMeta?.length)
+                    )
+                      (window.sarMReviews = sarmReviewsFromMeta),
+                        (window.preservedSarMReviews = sarmReviewsFromMeta),
+                        window.sarMReviews.length > 0 ? (o(), l(), g()) : d();
+                    else {
+                      x(
+                        'https://viva-fetch-review-bucket.s3.amazonaws.com/assets/' +
+                          Shopify.shop +
+                          '_p_' +
+                          meta.product.id +
+                          '.json',
+                        'GET',
+                        (data = null),
+                        (header = ['application/x-www-form-urlencoded']),
+                        (e) => {
+                          try {
+                            (window.sarMReviews = JSON.parse(e)), (window.preservedSarMReviews = JSON.parse(e));
+                          } catch (e) {
+                            (window.sarMReviews = []), (window.preservedSarMReviews = []);
+                          }
+                          window.sarMReviews.length > 0 ? (o(), l(), g()) : d();
+                        }
+                      );
+                    }
+                  }),
+                  a();
+              }),
+              'complete' === document.readyState || 'interactive' === document.readyState
+                ? setTimeout(y, 1)
+                : document.addEventListener('DOMContentLoaded', y),
+              (window.sarmCloseReviewModal = (e) => {
+                e?.preventDefault(), (document.getElementById('sarm-give-review-myModal').style.display = 'none');
+              }),
+              (window.sarmDeleteReviewPreview = (e) => {
+                let t = `sarm-review-preview-div${e}`;
+                document.getElementById(t).remove();
+              }),
+              (window.sarmFileChange = (e) => {
+                let t = e.target.files,
+                  a = document.getElementById('sarm-image-output-result');
+                for (let e = 0; e < t.length; e++) {
+                  let i = t[e];
+                  if (!i.type.match('image')) continue;
+                  let n = new FileReader();
+                  n.addEventListener('load', function (e) {
+                    let t = e.target,
+                      i = document.createElement('div'),
+                      n = Math.random();
+                    (i.id = `sarm-review-preview-div${n}`),
+                      (i.innerHTML =
+                        "<img class='sarm-preview-image' src='" +
+                        t.result +
+                        "'title='" +
+                        t.name +
+                        "'/>" +
+                        `<span onclick="sarmDeleteReviewPreview(${n})" class="sarm-delete-preview-image">&times;</span>`),
+                      a.insertBefore(i, null);
+                    let r = document.querySelectorAll('.sarm-review-files');
+                    r.length < window.sarMMaxReviewImages
+                      ? (r.forEach((e) => {
+                          'none' != e.style.display && (i.append(e), (e.style.display = 'none'));
+                        }),
+                        (document.getElementById('sarm-give-review-add-pic').innerHTML =
+                          '<p class="sarm-give-review-lebels">Add Images</p><input onchange="sarmFileChange(event)" class="sarm-review-files" name="file" id="sarm-review-files" type="file"></input>'))
+                      : (document.getElementById('sarm-give-review-add-pic').style.display = 'none');
+                  }),
+                    n.readAsDataURL(i);
+                }
+              }),
+              (window.samrSubmitReview = (e) => {
+                e.preventDefault();
+                try {
+                  var t;
+                  let e = document.getElementsByClassName('sarm-review-files'),
+                    a = new FormData();
+                  for (let t = 0; t < e.length; t++) a.append('file[]', e[t].files[0]);
+                  let n = document.getElementById('sarm-give-review-name'),
+                    r = document.getElementById('sarm-give-review-email'),
+                    s = document.getElementById('sarm-give-review-rating'),
+                    o = document.getElementById('sarm-give-review-text');
+                  if (
+                    i(n, (e) => {}) &&
+                    i(r, (e) => {}) &&
+                    i(s, (e) => {
+                      let t = document.getElementById('sarm-your-rating-title');
+                      t.style.color = e ? 'black' : 'red';
+                    }) &&
+                    ((t = r),
+                    (e) => {},
+                    0 == /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(t.value)
+                      ? (console.log('Invalid Email Address'),
+                        t.setAttribute('style', 'border:1px solid red !important; color: red !important'),
+                        0)
+                      : (t.setAttribute('style', 'border:1px solid #ced4da !important; color: black !important'), 1))
+                  ) {
+                    a.append('name', n.value),
+                      a.append('email', r.value),
+                      a.append('rating', s.value),
+                      a.append('content', o.value),
+                      a.append('product_id', window.sReviewProductId),
+                      a.append('my_shopify_domain', Shopify.shop),
+                      a.append('user_session', '');
+                    let e = c(__st.pageurl);
+                    a.append('handle', e),
+                      fetch('https://vivareviews.com/viva-front/submit-reviews', { method: 'POST', body: a });
+                    let t = document.getElementById('sarm-give-review-modal-content');
+                    t &&
+                      ((t.innerHTML = `<div class='sarm-thank-you-mgs'>${sarmReviewLanguageSettings?.thankyou_note}</div>`),
+                      setTimeout((e) => {
+                        window.sarmCloseReviewModal(e);
+                      }, 2400));
+                  }
+                } catch (e) {
+                  console.log('error in sending review to viva', e);
+                  let t = document.getElementById('sarm-give-review-modal-content');
+                  t &&
+                    ((t.innerHTML = `<div class='sarm-thank-you-mgs'>${sarmReviewLanguageSettings?.thankyou_note}</div>`),
+                    setTimeout((e) => {
+                      window.sarmCloseReviewModal(e);
+                    }, 2400));
+                }
+              }),
+              (window.sarmFillReviewRating = (e) => {
+                let t = document.getElementsByClassName('sarm-give-review-svg');
+                for (let e = 0; e < t.length; e++) t[e].style.fill = '#EDEDED';
+                for (let a = 0; a <= e; a++) t[a].style.fill = '#FFC107';
+                document.getElementById('sarm-give-review-rating').value = e + 1;
+              }),
+              (window.sarmOpenGiveReviewModal = (e) => {
+                e.stopPropagation();
+                let t = document.getElementById('sarm-give-review-myModal');
+                t && t.remove(),
+                  a(),
+                  ((t = document.getElementById('sarm-give-review-myModal')).style.display = 'block');
+              }),
+              window.addEventListener('click', function (e) {
+                if (document.getElementById('sarmyModal').contains(e.target));
+                else {
+                  null != document.getElementById('sarmyModal') && 1 == t && f();
+                }
+              });
+            var y,
+              b = 1;
+            function E(e) {
+              L((b += e));
+            }
+            function M(e) {
+              L((b = e));
+            }
+            function L(e) {
+              let t,
+                a = document.getElementsByClassName('sarmySlides'),
+                i = document.getElementsByClassName('sardemo');
+              for (e > a.length && (b = 1), e < 1 && (b = a.length), t = 0; t < a.length; t++)
+                a[t].style.display = 'none';
+              for (t = 0; t < i.length; t++) i[t].className = i[t].className.replace(' saractive', '');
+              (a[b - 1].style.display = 'block'), (i[b - 1].className += ' saractive');
+            }
+          }
+        } catch (R) {
+          console.log(R);
+        }
+    });
+</script>
